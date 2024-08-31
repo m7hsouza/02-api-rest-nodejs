@@ -1,0 +1,27 @@
+{
+  "name": "02-api-rest-nodejs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "lint": "eslint src --ext .ts --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "22.5.1",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "eslint": "8.57.0",
+    "eslint-config-standard-with-typescript": "43.0.1",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-n": "16.6.2",
+    "eslint-plugin-promise": "6.6.0",
+    "tsx": "4.19.0",
+    "typescript": "5.5.4"
+  },
+  "dependencies": {
+    "fastify": "4.28.1"
+  }
+}
