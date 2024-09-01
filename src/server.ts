@@ -1,13 +1,13 @@
 import fastify from 'fastify'
-import { knex } from './database'
+
+import { env } from './env'
+
+import { transactionsRoutes } from './routes/transactions'
 
 const app = fastify()
 
-app.get('/', async (_, __) => {
-  const tables = await knex('sqlite_schema').select('*')
-  return { tables }
-})
+app.register(transactionsRoutes, { prefix: '/transactions' })
 
-app.listen({ port: 3000 }, (_, address) => {
-  console.log(`Server listening at ${address}`)
-})
+app.listen({ port: env.PORT, host: '0.0.0.0' }).then(() => {
+  console.log(`Server listening on http://localhost:${env.PORT}`)
+});
