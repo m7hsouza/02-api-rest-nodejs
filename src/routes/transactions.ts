@@ -4,39 +4,61 @@ import { type FastifyInstance } from 'fastify'
 import { z } from 'zod'
 
 import { knex } from '../database'
+import { checkSessionIdExists } from '../middleware/check-session-id-exists'
 
 export async function transactionsRoutes(app: FastifyInstance): Promise<void> {
-  app.get('/summary', async () => {
-    const summary = await knex('transactions')
-      .sum('amount', { as: 'amount' })
-      .first()
+  app.get(
+    '/summary',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async () => {
+      const summary = await knex('transactions')
+        .sum('amount', { as: 'amount' })
+        .first()
 
-    return { summary }
-  })
+      return { summary }
+    },
+  )
 
-  app.get('/', async () => {
-    const transactions = await knex('transactions').select('*')
+  app.get(
+    '/',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request) => {
+      const sessionId = request.cookies.sessionId
+      const transactions = await knex('transactions')
+        .where('session_id', sessionId)
+        .select('*')
 
-    return { transactions }
-  })
+      return { transactions }
+    },
+  )
 
-  app.get('/:id', async (request, reply) => {
-    const getTransactionParamsSchema = z.object({
-      id: z.string().uuid(),
-    })
-    const { id } = getTransactionParamsSchema.parse(request.params)
+  app.get(
+    '/:id',
+    {
+      preHandler: [checkSessionIdExists],
+    },
+    async (request, reply) => {
+      const getTransactionParamsSchema = z.object({
+        id: z.string().uuid(),
+      })
+      const { id } = getTransactionParamsSchema.parse(request.params)
 
-    const transaction = await knex('transactions')
-      .select('*')
-      .where({ id })
-      .first()
+      const transaction = await knex('transactions')
+        .select('*')
+        .where({ id })
+        .first()
 
-    if (!transaction) {
-      return await reply.status(404).send()
-    }
+      if (!transaction) {
+        return await reply.status(404).send()
+      }
 
-    return { transaction }
-  })
+      return { transaction }
+    },
+  )
 
   app.post('/', async (request, reply) => {
     const createTransactionBodySchema = z.object({
