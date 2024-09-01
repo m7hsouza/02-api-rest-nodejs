@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "lint": "eslint src --ext .ts --fix",
-    "knex": "node --no-warnings --import tsx ./node_modules/.bin/knex"
+    "knex": "node --no-warnings --import tsx ./node_modules/.bin/knex",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
@@ -14,14 +15,17 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "2.2.2",
     "@types/node": "22.5.1",
+    "@types/supertest": "6.0.2",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "eslint": "8.57.0",
     "eslint-config-standard-with-typescript": "43.0.1",
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-n": "16.6.2",
     "eslint-plugin-promise": "6.6.0",
+    "supertest": "7.0.0",
     "tsx": "4.19.0",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "vitest": "2.0.5"
   },
   "dependencies": {
     "@fastify/cookie": "9.4.0",
