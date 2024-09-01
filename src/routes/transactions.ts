@@ -49,11 +49,22 @@ export async function transactionsRoutes(app: FastifyInstance): Promise<void> {
       request.body,
     )
 
+    let sessionId = request.cookies.sessionId
+
+    if (!sessionId) {
+      sessionId = crypto.randomUUID()
+      reply.setCookie('sessionId', sessionId, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7,
+      })
+    }
+
     await knex('transactions')
       .insert({
         id: crypto.randomUUID(),
         title,
         amount: type === 'debit' ? -amount : amount,
+        session_id: sessionId,
       })
       .returning('*')
 
