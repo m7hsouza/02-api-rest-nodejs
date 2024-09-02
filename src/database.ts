@@ -1,11 +1,18 @@
 import { knex as setupKnex, type Knex } from 'knex'
 import { env } from './env'
 
-export const config: Knex.Config = {
-  client: 'sqlite',
-  connection: {
+let connection
+if (env.DATABASE_CLIENT === 'pg') {
+  connection = env.DATABASE_CLIENT
+} else {
+  connection = {
     filename: env.DATABASE_URL,
-  },
+  }
+}
+
+export const config: Knex.Config = {
+  client: env.DATABASE_CLIENT,
+  connection,
   useNullAsDefault: true,
   migrations: {
     extension: 'ts',
